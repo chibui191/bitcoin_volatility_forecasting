@@ -1,2 +1,2 @@
-# stock_volatility_forecasting
+# Cryptocurrency (BTC-USD) Realized Volatility Forecasting
 Flatiron Capstone Project
