@@ -79,9 +79,9 @@ which is the dollar change in price as a percentage of previous day's price.
 
 Traditionally, Realized Volatility is defined as the **Standard Deviation of Daily Returns over a period of time**. Mathematically, **Daily Returns** can be represented as:
 
-/begin{align*}
+$
 R_{t, t+i} = P_{t+i} / P_{t} * 100
-/end{align*}
+$
 
 However, for practicality purposes, it's generally preferable to use the **Log Returns**, especially in mathematic modeling, because it helps eliminate non-stationary properties of time series data, and makes it more stable:
 
