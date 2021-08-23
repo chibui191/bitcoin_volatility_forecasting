@@ -269,14 +269,14 @@ My final LSTM model has an RMSPE of 0.0708 on the Test set (which is the most re
 
 In terms of performance on the validation set (365 days of data), LSTM model has an RMSPE of 0.191254, which is **roughly 2.1% better than the best performing variant of the GARCH models** - TARCH(2,2) with an RMSPE of 0.213242.
 
-However, since financial time series data are constantly evolving, no model would be able to consistently forecast with high accuracy level forever. The average lifetime of a model is between 6 months to 5 years, and there's a phenomenon in quant trading that is called **alpha decay**, which is the loss in predictive power of an alpha model over time. In addition, researchers have proved that the publication of a new "edge" or anomaly in the markets lessens its returns by up to 58%. 
+However, since financial time series data are constantly evolving, no model would be able to consistently forecast with high accuracy level forever. The average lifetime of a financial model is between 6 months to 5 years, and there's a phenomenon in quant trading that is called **alpha decay**, which is the loss in predictive power of an alpha model over time. In addition, researchers have proved that the publication of a new "edge" or anomaly in the markets lessens its returns by up to 58%. 
 
 These models therefore require constant tweaking and tuning based on the most recent information available to make sure the model stays up-to-date and learn to evolve with the markets. 
 
 
 # Next Steps
 
-As briefly mentioned above, I think there's potential application of WaveNet in the forecasting of volatility, and would like to explore that option in the future.
+As briefly mentioned in the Final Notebook, I think there's potential application of WaveNet in the forecasting of volatility, and would like to explore that option in the future.
 
 In addition, it's common knowledge that economic events could affect markets' dynamics. Since cryptocurrencies have cerain nuances that are different from other stocks and commodities', adding in regular economic calendars' events might not be the most relevant. I am currently still doing more research on the types of events that could have driven Bitcoin movements, and would like to incorporate that in another set of Multivariate LSTM models in the future to hopefully improve predictive power even more.
 
