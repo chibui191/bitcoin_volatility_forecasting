@@ -169,15 +169,16 @@ Mathematically, GARCH can be represented as follows:
 \sigma_{t}^2 = \omega + \sum_{i}^{q}\alpha_{i}\epsilon_{t-i}^2 + \sum_{1}^{p}\beta_{i}\sigma_{t-i}^2
 \end{align*}
 
-in which $\sigma_{t}^2$ is variance at time step `t` and $\epsilon_{t-i}^2$ is the model residuals at time step `t-1`
+<img src="https://render.githubusercontent.com/render/math?math=\sigma_{t}^2 = \omega %2B \sum_{i}^{q}\alpha_{i}\epsilon_{t%20i}^2 %2B \sum_{1}^{p}\beta_{i}\sigma_{t%20i}^2">
+
+
+in which <img src="https://render.githubusercontent.com/render/math?math=\sigma_{t}^2"> is variance at time step `t` and <img src="https://render.githubusercontent.com/render/math?math=\epsilon_{t-i}^2"> is the model residuals at time step `t-1`
 
 GARCH(1,1) only contains first-order lagged terms and the mathematic equation for it is: 
 
-\begin{align*}
-\sigma^2_t = \omega + \alpha\epsilon^{2}_{(t-1)} + \beta\sigma^{2}_{(t-1)}
-\end{align*}
+<img src="https://render.githubusercontent.com/render/math?math=\sigma^2_t = \omega %2B \alpha\epsilon^{2}_{(t%201)} %2B \beta\sigma^{2}_{(t%201)}">
 
-where $\alpha$, $\beta$ and $\omega$ sum up to 1, and $\omega$ is the long term variance.
+where <img src="https://render.githubusercontent.com/render/math?math=\alpha">, <img src="https://render.githubusercontent.com/render/math?math=\beta"> and <img src="https://render.githubusercontent.com/render/math?math=\omega"> sum up to 1, and <img src="https://render.githubusercontent.com/render/math?math=\omega"> is the long term variance.
 
 ---
 
