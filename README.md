@@ -87,7 +87,7 @@ However, for practicality purposes, it's generally preferable to use the **Log R
 
 <img src="https://render.githubusercontent.com/render/math?math=r_{t, t%2Bi} = log(P_{t%2Bi} / P_{t})">
 
-(In both formulas, <img src="https://render.githubusercontent.com/render/math?math=P_{t}"> represents the price at time step `t`)
+(In both formulas, <img src="https://render.githubusercontent.com/render/math?math=P_{t}"> represents the price at time step <img src="https://render.githubusercontent.com/render/math?math=t">)
 
 There's another advantage to log returns, which is that they're additive across time: 
 
@@ -168,11 +168,11 @@ Mathematically, GARCH can be represented as follows:
 <img src="https://render.githubusercontent.com/render/math?math=\sigma_{t}^2 = \omega %2B \sum_{i}^{q}\alpha_{i}\epsilon_{t-i}^2 %2B \sum_{1}^{p}\beta_{i}\sigma_{t-i}^2">
 
 
-in which <img src="https://render.githubusercontent.com/render/math?math=\sigma_{t}^2"> is variance at time step `t` and <img src="https://render.githubusercontent.com/render/math?math=\epsilon_{t-i}^2"> is the model residuals at time step `t-1`
+in which <img src="https://render.githubusercontent.com/render/math?math=\sigma_{t}^2"> is variance at time step <img src="https://render.githubusercontent.com/render/math?math=t"> and <img src="https://render.githubusercontent.com/render/math?math=\epsilon_{t-i}^2"> is the model residuals at time step <img src="https://render.githubusercontent.com/render/math?math=t-1">
 
 GARCH(1,1) only contains first-order lagged terms and the mathematic equation for it is: 
 
-<img src="https://render.githubusercontent.com/render/math?math=\sigma^2_t = \omega %2B \alpha\epsilon^{2}_{(t %20 1)} %2B \beta\sigma^{2}_{(t%201)}">
+<img src="https://render.githubusercontent.com/render/math?math=\sigma^2_t = \omega %2B \alpha\epsilon^{2}_{(t-1)} %2B \beta\sigma^{2}_{(t-1)}">
 
 where <img src="https://render.githubusercontent.com/render/math?math=\alpha">, <img src="https://render.githubusercontent.com/render/math?math=\beta"> and <img src="https://render.githubusercontent.com/render/math?math=\omega"> sum up to 1, and <img src="https://render.githubusercontent.com/render/math?math=\omega"> is the long term variance.
 
