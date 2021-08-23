@@ -29,7 +29,7 @@ Author: **Chi Bui**
 ```
 
 ### Quick Links
-1. [Final Analysis Notebook](./Notebooks/Reports/report-notebook.ipynb)
+1. [Final Analysis Notebook](./Notebooks/Reports/report_notebook.ipynb)
 
 ### Remarks
 
@@ -295,7 +295,7 @@ Another goal of mine is to extend the forecasting horizon to 30 days instead of 
 7. https://www.investopedia.com/terms/v/vix.asp 
 8. https://www.hindawi.com/journals/complexity/2021/6647534/ 
 9. https://github.com/ritvikmath/Time-Series-Analysis/blob/master/GARCH%20Stock%20Modeling.ipynb
-10.https://github.com/ritvikmath/Time-Series-Analysis/blob/master/GARCH%20Model.ipynb
+10. https://github.com/ritvikmath/Time-Series-Analysis/blob/master/GARCH%20Model.ipynb
 11. https://www.kaggle.com/c/optiver-realized-volatility-prediction 
 12. https://www.youtube.com/watch?v=NKHQiN-08S8
 13. https://goldinlocks.github.io/ARCH_GARCH-Volatility-Forecasting/ 
