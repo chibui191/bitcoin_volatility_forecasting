@@ -267,7 +267,7 @@ A trader does not need to make perfectly accurate forecast to have a positive ex
 
 My final LSTM model has an RMSPE of 0.0708 on the Test set (which is the most recent 30 days of which future volatility data is available for comparison). Since RMSPE indicates the average magnitude of the error in relation to the actual values, that translates to **a magnitude accuracy of 93% on the average 7 days forward-looking daily volatility forecasting within the period of 07/17/2021 to 08/15/2021**, which is part of some more quiet months for volatility historically.  
 
-In terms of performance on the validation set (365 days of data), LSTM model has an RMSPE of 0.191254, which is **roughly 2.1% better than the best performing variant of the GARCH models** - TARCH(2,2) with an RMSPE of 0.213242.
+In terms of performance on the validation set, which spans 365 days, LSTM model has an RMSPE of 0.191254, which is **roughly 2.1% better than the best performing variant of the GARCH models** - TARCH(2,2) with an RMSPE of 0.213242.
 
 However, since financial time series data are constantly evolving, no model would be able to consistently forecast with high accuracy level forever. The average lifetime of a financial model is between 6 months to 5 years, and there's a phenomenon in quant trading that is called **alpha decay**, which is the loss in predictive power of an alpha model over time. In addition, researchers have proved that the publication of a new "edge" or anomaly in the markets lessens its returns by up to 58%. 
 
