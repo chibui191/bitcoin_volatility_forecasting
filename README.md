@@ -31,6 +31,10 @@ Author: **Chi Bui**
 ### Quick Links
 1. [Final Analysis Notebook](./Notebooks/Reports/report-notebook.ipynb)
 
+### Remarks
+
+The second part of the notebook utilizes LSTM, which uses an optimized implementation when running on a GPU. It's therefore highly recommended to run the notebooks on [Google Colab](https://colab.research.google.com/notebooks/intro.ipynb#recent=true).
+
 
 ## Overview
 
