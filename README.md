@@ -38,27 +38,27 @@ The second part of the notebook utilizes LSTM, which uses an optimized implement
 
 ## Overview
 
-Volatility is generally accepted as the best measure of market risk and volatility forecasting is used in many different applications across the industry including risk management, value-at-risk, portfolio construction and optimisation, active fund management, risk-parity investing, and derivatives trading. 
+Volatility is generally accepted as the best measure of market risk and volatility forecasting is used in many different applications across the industry including risk management, value-at-risk, portfolio construction and optimization, active fund management, risk-parity investing, and derivatives trading. 
 
 Volatility attempts to measure magnitude of price movements that a financial instrument experiences over a certain period of time. The more dramatic the price swings are in that instrument, the higher the level of volatility, and vice versa.
 
-The purpose of this project is to take a sneak peek into the future by **forecasting the next 7 days' average daily realized volatility of BTC-USD** using 2 different approaches - the traditional econometric approach to volatility prediction of financial time series **GARCH** and state-of-the-art **LSTM Neural Networks**.
+The purpose of this project is to take a sneak peek into the future by **forecasting the next 7 days' average daily realized volatility of BTC-USD** using 2 different approaches - the traditional econometric approach **GARCH** and state-of-the-art **LSTM Neural Networks**.
 
 
 ## Business Problem
 
-Since Bitcoin's first appearance in 2009, it has changed the world's financial landscape substantially. The decentralized cryptocurrency has established itself as an asset class recognized by many asset managers, large investment banks and hedge funds. As the speed of mainstream adoption continues to soar, it is also leading investors to explore a new venture, such as crypto options.
+Since Bitcoin's first appearance in 2009, it has changed the world's financial landscape substantially. The decentralized cryptocurrency has established itself as an asset class recognized by many asset managers, large investment banks and hedge funds. As the speed of mainstream adoption continues to soar, it is also leading investors to explore new ventures, such as crypto options.
 
-Bitcoin has been historically known to be more volatile than regulated stocks and commodities. Its most recent surge in late December 2020, early January 2021 has brought about a lot of questions and uncertainties about the future financial landscape. At the point of writing this report (August 2021), Bitcoin is traded at slightly above USD 50,200, which is no small feat considering it entered 2020 at around USD 7,200. 
+Bitcoin has been historically known to be more volatile than regulated stocks and commodities. Its most recent surge in late December 2020, early January 2021 has brought about a lot of questions and uncertainties about the future financial landscape. At the point of this report being written (August 2021), Bitcoin is traded at slightly above USD 50,200, which is no small feat considering it entered 2020 at around USD 7,200. 
 
-Although the forecasting and modeling of volatility has been the focus of many empirical studies and theoretical investigations in academia, forecasting volatility accurately remains a crucial challenge for scholars. On top of that, since crypto option trading is relatively new, there has not been as much research done on this Bitcoin volatility forecasting. Crytocurrencies carry certain nuances that differ themselves from traditional regulated stocks and commodities, which would also need to be accounted for.
+Although the forecasting and modeling of volatility has been the focus of many empirical studies and theoretical investigations in academia, forecasting volatility accurately remains a crucial challenge for scholars. On top of that, since crypto options trading is relatively new, there has not been as much research done on Bitcoin volatility forecasting specifically. Crytocurrencies carry certain nuances that differ themselves from traditional regulated stocks and commodities, which would also need to be accounted for.
 
 
 ## Dataset
 
 The historical dataset of Bitcoin Open/Close/High/Low prices were obtained using the Yahoo Finance API **`yfinance`**. This API is free, very easy to set up, but yet still contains a wide range of data and offerings. 
 
-BTC-USD prices were downloaded using ticker `BTC-USD` at 1-day interval. Yahoo did not add Bitcoin until 2014; and therefore although it was first traded in 2009, **`yfinance`** only contains data from September 2014 until now (August 2021). I would therefore be working with over 2,500 datapoints covering about 7 years of trading days.
+BTC-USD prices were downloaded using ticker `BTC-USD` at 1-day interval. Yahoo did not add Bitcoin until 2014; and therefore although it was first traded in 2009, **`yfinance`** only contains data from September 2014 until now (August 2021). I would therefore be working with approx. 2,500 datapoints covering about 7 years of trading.
 
 ### Dataset Structure
 
@@ -73,10 +73,9 @@ The objective of this project is to forecast the average daily volatility of BTC
 
 ## Volatility Measuring 
 
-Volatility does not measure the direction of price changes of a financial instrument, merely its dispersions over a certain period of time. The more dramatic the price swings are in that instrument, the higher the level of volatility, and vice versa. High volatility is associated with higher risk, and low volatility lower risk.
+Volatility does **not** measure the direction of price changes of a financial instrument, merely its dispersions over a certain period of time. High volatility is associated with higher risk, and low volatility lower risk. There're 2 main types of Volatility:
 
-- **Historical Volatility** (HV) or **Realized Volatility** is the actual volatility demonstrated by the underlying over a period of time. Realized Volatility is commonly calculated as the standard deviation of price returns,
-which is the dollar change in price as a percentage of previous day's price.
+- **Historical Volatility** (HV) or **Realized Volatility** is the actual volatility demonstrated by the underlying asset over a period of time. Realized Volatility is commonly calculated as the standard deviation of price returns, which is the dollar change in price as a percentage of previous day's price.
 - **Implied volatility** (IV), on the other hand, is the level of volatility of the underlying that is implied by the current option price.
 
 (The main focus of this project is **NOT Implied Volatility**, which can be derived from option pricing models such as the Black Scholes Model). 
@@ -109,9 +108,9 @@ Using interval window of 30 days would also help avoid wasting too many datapoin
 
 ### Forecasting Target
 
-The target here would be `vol_future` which represents the daily realized volatility of the next `n_future` days from today (average daily volatility from `t + n_future - INTERVAL_WINDOW` to time step `t + n_future`). 
+The target here would be `vol_future` which represents the daily realized volatility of the next `n_future` days from today (average daily volatility from `t + n_future - INTERVAL_WINDOW + 1` to time step `t + n_future`). 
 
-For example, using an `n_future` value of 7 and an `INTERVAL_WINDOW` of 30, the value that I want to predict at time step `t` would be the average daily realized volatility from time step `t-23` to time step `t+7`.
+For example, using an `n_future` value of 7 and an `INTERVAL_WINDOW` of 30, the value that I want to predict at time step `t` would be the average daily realized volatility from time step `t-22` to time step `t+7`.
 
 ![Current versus Future Daily Volatility](./images/daily_vol.jpg)
 
@@ -132,11 +131,11 @@ For example, using an `n_future` value of 7 and an `INTERVAL_WINDOW` of 30, the 
 There're a total of 2491 usable datapoints in this dataset which covers a period of almost 7 years from October 2014 until today (August 2021). Since cryptocurrencies are not traded on a regulated exchange, the Bitcoin market is open 24/7, 1 year covers a whole 365 trading days instead of 252 days a year like with other stocks and commodities.
 
 I then split the dataset into 3 parts as follows:
-- the most recent 30 usable datapoints would be used for final Testing - approx. 1.2%
-- 1 full year (365 days) for Validation and model tuning during training - approx. 14.7%
-- and the remaining for Training - approx. 84.1%
+- the most recent 30 usable datapoints would be used for final **Testing - approx. 1.2%**
+- 1 full year (365 days) for **Validation** and model tuning during training - **approx. 14.7%**
+- and the remaining for **Training - approx. 84.1%**
 
-The final model would be trained on the combination of Training & Validation set, and then tested against the Test set (last 30 days with future volatility available for performance evaluation).
+The final model would be trained on the combination of Training & Validation sets, and then tested on the Test set (last 30 days with future volatility available for performance evaluation).
 
 ![Training Validation Test Split](./images/train_val_test.jpg)
 
@@ -272,7 +271,7 @@ In terms of performance on the validation set (365 days of data), LSTM model has
 
 However, since financial time series data are constantly evolving, no model would be able to consistently forecast with high accuracy level forever. The average lifetime of a model is between 6 months to 5 years, and there's a phenomenon in quant trading that is called **alpha decay**, which is the loss in predictive power of an alpha model over time. In addition, researchers have proved that the publication of a new "edge" or anomaly in the markets lessens its returns by up to 58%. 
 
-These models therfore require constant tweaking and tuning based on the most recent information available to make sure the model stays up-to-date and learn to evolve with the markets. 
+These models therefore require constant tweaking and tuning based on the most recent information available to make sure the model stays up-to-date and learn to evolve with the markets. 
 
 
 # Next Steps
