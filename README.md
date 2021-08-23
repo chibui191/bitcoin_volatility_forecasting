@@ -85,23 +85,18 @@ However, for practicality purposes, it's generally preferable to use the **Log R
 
 **Log Returns** Formula:
 
-/begin{align*}
-r_{t, t+i} = log(P_{t+i} / P_{t})
-/end{align*}
+<img src="https://render.githubusercontent.com/render/math?math=r_{t, t%2Bi} = log(P_{t%2Bi} / P_{t})">
 
-(In both formulas, $P_{t}$ represents the price at time step $t$)
+(In both formulas, <img src="https://render.githubusercontent.com/render/math?math=P_{t}"> represents the price at time step `t`)
 
 There's another advantage to log returns, which is that they're additive across time: 
 
-/begin{align*}
-r_{t1, t2} + r_{t2, t3} = r_{t1, t3}
-/end{align*}
+<img src="https://render.githubusercontent.com/render/math?math=r_{t1, t2} %2B r_{t2, t3} = r_{t1, t3}">
 
 For this specific project, **DAILY REALIZED VOLATILITY** is calculated using an **interval window** of **30 days** as follows:
 
-/begin{align*}
-\sigma_{daily} = \sqrt{\sum_{t} r_{t-1, t}^2} * \sqrt{\frac{1}{interval-1}}$
-/end{align*}
+<img src="https://render.githubusercontent.com/render/math?math=\sigma_{daily} = \sqrt{\sum_{t} r_{t-1, t}^2} * \sqrt{\frac{1}{interval-1}}
+">
 
 The reason I selected 30 days is because 7 days seems too noisy to observe meaningful patterns, while longer intervals seem to smooth the volatility line down significantly and tend to mean-revert. 
 
