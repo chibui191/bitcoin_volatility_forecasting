@@ -244,23 +244,23 @@ The best performing Multivariate model is as simple 2-layered Bidirectional LSTM
 
 # Conclusion
 
-|    | Model                                                                    |   Validation RMSPE |   Validation RMSE |
-|---:|:-------------------------------------------------------------------------|-------------------:|------------------:|
-|  0 | Mean Baseline                                                            |           0.812957 |         0.136064  |
-|  1 | Random Walk Naive Forecasting                                            |           0.233755 |         0.0525863 |
-|  2 | GARCH(1,1) | Constant Mean | Normal Dist                                 |           0.534194 |         0.185466  |
-|  3 | Analytical GJR-GARCH(1,1,1) | Constant Mean | Skewt Dist                 |           0.286386 |         0.0910722 |
-|  4 | Bootstrap TARCH(1,1) | Constant Mean | Skewt Dist                        |           0.217488 |         0.0696523 |
-|  5 | Simulation TARCH(1,1) | Constant Mean | Skewt Dist                       |           0.222418 |         0.0731703 |
-|  6 | Bootstrap TARCH(2,2) | Constant Mean | Skewt Dist                        |           0.213242 |         0.0668474 |
-|  7 | Simple LR Fully Connected NN | n_past=14                                 |           0.252272 |         0.0526278 |
-|  8 | LSTM 1 layer 20 units | n_past=14                                        |           0.234317 |         0.0511795 |
-|  9 | 2 layers Bidirect LSTM (32/16 units) | n_past=30                         |           0.200845 |         0.0485337 |
-| 10 | 1 Conv1D 2 Bidirect LSTM layers (32/16) | n_past=60 | batch=64           |           0.27029  |         0.0605635 |
-| 11 | 2 Bidirect LSTMs (32/16) | n_past=30 | batch=64 | SGD lr=5e-05           |           0.761351 |         0.141783  |
-| 12 | Multivariate Bidirect LSTM 1 layer (20 units) | n_past=30                |           0.191266 |         0.0482642 |
-| 13 | Multivariate Bidirect LSTM 3 layers (64/32/16 units) | n_past=30         |           0.236086 |         0.0551671 |
-| 14 | Multivariate 2 Bidirect LSTM layers (20/10 units) | n_past=30 | batch=64 |           0.191254 |         0.0487875 |
+|    | Model                                                                  |   Validation RMSPE |   Validation RMSE |
+|---:|:-----------------------------------------------------------------------|-------------------:|------------------:|
+|  0 | Mean Baseline                                                          |           0.812957 |         0.136064  |
+|  1 | Random Walk Naive Forecasting                                          |           0.233755 |         0.0525863 |
+|  2 | GARCH(1,1)  Constant Mean  Normal Dist                                 |           0.534194 |         0.185466  |
+|  3 | Analytical GJR-GARCH(1,1,1)  Constant Mean  Skewt Dist                 |           0.286386 |         0.0910722 |
+|  4 | Bootstrap TARCH(1,1)  Constant Mean  Skewt Dist                        |           0.217488 |         0.0696523 |
+|  5 | Simulation TARCH(1,1)  Constant Mean  Skewt Dist                       |           0.222418 |         0.0731703 |
+|  6 | Bootstrap TARCH(2,2)  Constant Mean  Skewt Dist                        |           0.213242 |         0.0668474 |
+|  7 | Simple LR Fully Connected NN  n_past=14                                |           0.252272 |         0.0526278 |
+|  8 | LSTM 1 layer 20 units  n_past=14                                       |           0.234317 |         0.0511795 |
+|  9 | 2 layers Bidirect LSTM (32/16 units)  n_past=30                        |           0.200845 |         0.0485337 |
+| 10 | 1 Conv1D 2 Bidirect LSTM layers (32/16)  n_past=60  batch=64           |           0.27029  |         0.0605635 |
+| 11 | 2 Bidirect LSTMs (32/16)  n_past=30  batch=64  SGD lr=5e-05            |           0.761351 |         0.141783  |
+| 12 | Multivariate Bidirect LSTM 1 layer (20 units)  n_past=30               |           0.191266 |         0.0482642 |
+| 13 | Multivariate Bidirect LSTM 3 layers (64/32/16 units)  n_past=30        |           0.236086 |         0.0551671 |
+| 14 | Multivariate 2 Bidirect LSTM layers (20/10 units)  n_past=30  batch=64 |           0.191254 |         0.0487875 |
 
 A trader does not need to make perfectly accurate forecast to have a positive expectation when participating in the markets, he/she just needs to make a forecast that is **more correct than the consensus**, which I believe my best model so far would be able to help achieve. 
 
