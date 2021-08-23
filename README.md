@@ -180,8 +180,6 @@ GARCH(1,1) only contains first-order lagged terms and the mathematic equation fo
 
 where <img src="https://render.githubusercontent.com/render/math?math=\alpha">, <img src="https://render.githubusercontent.com/render/math?math=\beta"> and <img src="https://render.githubusercontent.com/render/math?math=\omega"> sum up to 1, and <img src="https://render.githubusercontent.com/render/math?math=\omega"> is the long term variance.
 
----
-
 (Reference: Sinclair (2020))
 
 GARCH is generally regarded as an insightful improvement on naively assuming future volatility will be like the past, but also considered widely overrated as predictor by some experts in the field of volatility. GARCH models capture the essential characteristics of volatility: clustering and mean-revert.
