@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Directories
+Model/
+performance_df/
+
+.DS_Store
