@@ -287,22 +287,39 @@ Another goal of mine is to extend the forecasting horizon to 30 days instead of 
 # References:
 
 1. Géron, A. (2019). *In Hands-on machine learning with Scikit-Learn & TensorFlow: concepts, tools, and techniques to build intelligent systems.* O'Reilly Media, Inc.
+
 2. Sinclair, E. (2020). *Positional option trading: An advanced guide.* John Wiley &amp; Sons. 
+
 3. https://algotrading101.com/learn/yfinance-guide/ 
+
 4. https://www.coursera.org/learn/tensorflow-sequences-time-series-and-prediction/supplement/DM4fi/convolutional-neural-networks-course
+
 5. https://insights.deribit.com/options-course/
+
 6. https://arch.readthedocs.io/en/latest/univariate/univariate_volatility_forecasting.html 
+
 7. https://www.investopedia.com/terms/v/vix.asp 
+
 8. https://www.hindawi.com/journals/complexity/2021/6647534/ 
+
 9. https://github.com/ritvikmath/Time-Series-Analysis/blob/master/GARCH%20Stock%20Modeling.ipynb
+
 10. https://github.com/ritvikmath/Time-Series-Analysis/blob/master/GARCH%20Model.ipynb
+
 11. https://www.kaggle.com/c/optiver-realized-volatility-prediction 
+
 12. https://www.youtube.com/watch?v=NKHQiN-08S8
+
 13. https://goldinlocks.github.io/ARCH_GARCH-Volatility-Forecasting/ 
+
 14. https://towardsdatascience.com/time-series-analysis-on-multivariate-data-in-tensorflow-2f0591088502 
+
 15. https://deepmind.com/blog/article/wavenet-generative-model-raw-audio 
+
 16. https://github.com/philipperemy/keras-tcn 
+
 17. http://users.metu.edu.tr/ozancan/ARCHGARCHTutorial.html
+
 18. https://towardsdatascience.com/8-commonly-used-pandas-display-options-you-should-know-a832365efa95
 
 
