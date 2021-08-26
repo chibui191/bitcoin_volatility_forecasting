@@ -58,7 +58,7 @@ Although the forecasting and modeling of volatility has been the focus of many e
 
 The historical dataset of Bitcoin Open/Close/High/Low prices were obtained using the Yahoo Finance API **`yfinance`**. This API is free, very easy to set up, but yet still contains a wide range of data and offerings. 
 
-BTC-USD prices were downloaded using ticker `BTC-USD` at 1-day interval. Yahoo did not add Bitcoin until 2014; and therefore although it was first traded in 2009, **`yfinance`** only contains data from September 2014 until now (August 2021). I would therefore be working with approx. 2,500 datapoints covering about 7 years of trading.
+BTC-USD prices were downloaded using ticker `BTC-USD` at 1-day interval. Yahoo did not add Bitcoin until 2014; and therefore although it was first traded in 2009, **`yfinance`** only contains data from September 2014 until now (August 2021). I would therefore be working with approx. 2,500 datapoints covering about 7 years.
 
 ### Dataset Structure
 
@@ -121,9 +121,19 @@ For example, using an `n_future` value of 7 and an `INTERVAL_WINDOW` of 30, the 
 
 ![Daily Volatility Grouped by Month](./images/vol_by_month.jpg)
 
+It can be observed that:
+
+- Volatility has consistently reached some of its higher points in the in the months of December/January historically
+- March and April has the most amount of large outliers
+- while August and September (which are the upcoming months I am going to forecast) historically has been relatively quiet
+
 ### Daily Volatility Grouped by Year
 
 ![Daily Volatility Grouped by Year](./images/vol_by_year.jpg)
+
+This plot does reflect Bitcoin's first record peak in 2017 (around USD 19,800 towards the end of December). And the outliers in 2020 corresponded with its over 200% surge in 2020 (Bitcoin started out at USD 7,200 at the beginning of 2020). It reached USD 20,000 on most exchanges on 12/15/2020, and then proceeded to hit USD 30,000 just 17 days later, which is very impressive considering it took the Dow Jones close to 3 years to make the same move. And then, on 01/07/2021 it broke USD 40,000.
+
+And based on this, 2021's daily volatiliy overall has been on the higher side as well.
 
 
 ## Train-Validation-Test Splits
@@ -146,9 +156,9 @@ The final model would be trained on the combination of Training & Validation set
 
 Usually with financial time series, if we just shift through the historic data trying different methods, parameters and timescales, it's almost certain to find to some strategy with in-sample profitability at some point. However the whole purpose of "forecasting" is to predict the future based on currently available information, and a model that performs best on training data might not be the best when it comes to out-of-sample generalization (or **overfitting**). Avoiding/Minimizing overfitting is even more important in the constantly evolving financial markets where the stake is high.
 
-The 2 main metrics I'd be using are **RMSPE (Root Mean Squared Percentage Error)** and **RMSE (Root Mean Square Errors)** with RMSPE prioritized. Timescaling plays a crucial role in the calculation of volatility due to the level of freedom in frequency/interval window selection. Therefore, RMSPE would help capture degree of errors compared to desired target values better than other metrics. In addition, RMSPE would punish large errors more than regular MAPE (Mean Absolute Percentage Error).
+The 2 main metrics I'd be using are **RMSPE (Root Mean Squared Percentage Error)** and **RMSE (Root Mean Square Errors)** with RMSPE prioritized. Timescaling plays a crucial role in the calculation of volatility due to the level of freedom in frequency/interval window selection. Therefore, RMSPE would help capture degree of errors compared to desired target values better than other metrics. In addition, RMSPE would punish large errors more than regular MAPE (Mean Absolute Percentage Error). 
 
-RMSE and RMSPE would be tracked across different models' performance on validation set forecasting to indicate their abilities to generalize on out-of-sample data.
+RMSE and RMSPE would be tracked across different models' performance on validation set forecasting to indicate their abilities to generalize on out-of-sample data. As both of these metrics indicate the level of Error, the goal is to gradually reduce their values through different model structures and iterations.
 
 
 ## Baseline Models
@@ -183,7 +193,7 @@ where <img src="https://render.githubusercontent.com/render/math?math=\alpha">, 
 
 GARCH is generally regarded as an insightful improvement on naively assuming future volatility will be like the past, but also considered widely overrated as predictor by some experts in the field of volatility. GARCH models capture the essential characteristics of volatility: clustering and mean-revert.
 
-Among all variants of the GARCH family that I have created, **TARCH(2,2)** with **Bootstrap** forecasting method was able to achive highest RMSPE and RMSE on the Validation Set.
+Among all variants of the GARCH family that I have created, **TARCH(2,2)** with **Bootstrap** forecasting method was able to achive lowest RMSPE and RMSE on the Validation Set.
 
 ![TARCH 2,2 Predictions](./images/tarch_22_preds.jpg)
 
@@ -278,7 +288,7 @@ These models therefore require constant tweaking and tuning based on the most re
 
 As briefly mentioned in the Final Notebook, I think there's potential application of WaveNet in the forecasting of volatility, and would like to explore that option in the future.
 
-In addition, it's common knowledge that economic events could affect markets' dynamics. Since cryptocurrencies have cerain nuances that are different from other stocks and commodities', adding in regular economic calendars' events might not be the most relevant. I am currently still doing more research on the types of events that could have driven Bitcoin movements, and would like to incorporate that in another set of Multivariate LSTM models in the future to hopefully improve predictive power even more.
+In addition, it's common knowledge that economic events could affect markets' dynamics. Since cryptocurrencies have cerain nuances that are different from other stocks and commodities', adding in regular economic calendars' events might not be the most relevant. I am currently still doing more research on the types of events that could have driven Bitcoin movements (ie events indicating/signaling an increase in Bitcoin adoption), and would like to incorporate that in another set of Multivariate LSTM models in the future to hopefully improve predictive power even more.
 
 Another goal of mine is to extend the forecasting horizon to 30 days instead of 7. 30-day-out predictions would be able to bring a lot of values to option trading, as options contract cycles are usually expressed in terms of months. 
 
