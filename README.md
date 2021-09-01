@@ -118,7 +118,7 @@ The target here would be `vol_future` which represents the daily realized volati
 
 For example, using an `n_future` value of 7 and an `INTERVAL_WINDOW` of 30, the value that I want to predict at time step `t` would be the average daily realized volatility from time step `t-22` to time step `t+7`.
 
-![Creating Target](./images/vol_shift.gif)
+![Creating Target](./images/vol_shift_opt.gif)
 
 
 ## Exploratory Data Analysis
