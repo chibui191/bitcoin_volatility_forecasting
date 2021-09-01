@@ -112,13 +112,22 @@ Using interval window of 30 days would also help avoid wasting too many datapoin
 
 ![Different Intervals Plot](./images/diff_intervals.png)
 
+Time-series forecasting models are the models that are capable to predict **future** values based on previously observed values. Target "**future**" data in this case is obtained by **shifting the current volatility backward** by the number of `n_future` lags. 
+
+For example, respected to last week's Monday, this week's Monday is the "**future**"; therefore I just need to shift the volatility this week back by 7 days, and use it as the desired "**future**" output for last week, which I would then use for Neural Networks training and model performance evaluation. 
+
+This is a visualization of how current volatility is shifted backward to become future values, which I want to eventually aim for.
+
+![Shifting Volatility backwards](./images/vol_shift_opt.gif)
+
+In the plot above, the **blue line** indicates the **target future** value that I ultimately try to match up to. 
+And the dotted **gray line** represents the **current volatility** in real-time. 
+
 ### Forecasting Target
 
 The target here would be `vol_future` which represents the daily realized volatility of the next `n_future` days from today (average daily volatility from `t + n_future - INTERVAL_WINDOW + 1` to time step `t + n_future`). 
 
 For example, using an `n_future` value of 7 and an `INTERVAL_WINDOW` of 30, the value that I want to predict at time step `t` would be the average daily realized volatility from time step `t-22` to time step `t+7`.
-
-![Creating Target](./images/vol_shift_opt.gif)
 
 
 ## Exploratory Data Analysis
