@@ -108,15 +108,13 @@ The reason I selected 30 days is because 7 days seems too noisy to observe meani
 
 Using interval window of 30 days would also help avoid wasting too many datapoints at the beginning of the dataset.
 
-![Different Intervals Plot](./images/diff_intervals.jpg)
+![Different Intervals Plot](./images/diff_intervals.png)
 
 ### Forecasting Target
 
 The target here would be `vol_future` which represents the daily realized volatility of the next `n_future` days from today (average daily volatility from `t + n_future - INTERVAL_WINDOW + 1` to time step `t + n_future`). 
 
 For example, using an `n_future` value of 7 and an `INTERVAL_WINDOW` of 30, the value that I want to predict at time step `t` would be the average daily realized volatility from time step `t-22` to time step `t+7`.
-
-![Current versus Future Daily Volatility](./images/daily_vol.png)
 
 
 ## Exploratory Data Analysis
@@ -142,6 +140,10 @@ And based on this, 2021's daily volatiliy overall has been on the higher side as
 ### Volatility Distribution
 
 ![Volatility Distribution](./images/vol_dist.png)
+
+The distribution of daily realized volatility is lightly right skewed, with a small number of larger values spreaded thinly on the right.
+
+A skewed right distribution would have smaller median compared to mean, and mode smaller than median (mode < median < mean).
 
 
 ## Train-Validation-Test Splits
@@ -210,6 +212,7 @@ Among all variants of the GARCH family that I have created, **TARCH(2,2)** with 
 
 ![TARCH 1,2 Predictions](./images/best_tarch_preds.png)
 
+
 ## Neural Networks
 
 While GARCH remains the gold standard for volatility prediction within traditional financial institutions, there has been an increasing numbers of professionals and researchers turning to Machine Learning, especially Neural Networks, to gain insights into the financial markets in recent years.
@@ -224,7 +227,7 @@ This could help provide additional context to the networks, and usually produces
 
 After experimenting with various Neural Networks architectures, I found that a simple 2-layered Bidirectional LSTM model with 32 and 16 units outpeformed everything else, including the best GARCH model found. 
 
-![2 layers Bidirectional LSTM predictions](./images/lstm_7_preds.jpg)
+![2 layers Bidirectional LSTM predictions](./images/lstm_7_preds.png)
 
 
 ## Final Model
@@ -263,7 +266,7 @@ in which:
 
 The best performing Multivariate model is as simple 3-layered Bidirectional LSTMs with 64, 32 and 16 units using a lookback window `n_past` of 30 days and `batch_size = 64`. In addition, there're 3 Dropout layers at 0.1 in between hidden LSTM layers.
 
-![Final Multivariate LSTM predictions](./images/final_lstm_preds.jpg)
+![Final Multivariate LSTM predictions](./images/final_lstm_preds.png)
 
 
 # Conclusion
