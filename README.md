@@ -60,6 +60,7 @@ The historical dataset of Bitcoin Open/Close/High/Low prices were obtained using
 
 BTC-USD prices were downloaded using ticker `BTC-USD` at 1-day interval. Yahoo did not add Bitcoin until 2014; and therefore although it was first traded in 2009, **`yfinance`** only contains data from September 2014 until now (August 2021). I would therefore be working with approx. 2,500 datapoints covering about 7 years.
 
+
 ### Dataset Structure
 
 The dataset contains daily prices of BTC-USD including:
@@ -69,6 +70,9 @@ The dataset contains daily prices of BTC-USD including:
 - Close
 
 The objective of this project is to forecast the average daily volatility of BTC-USD 7 days out, using an Interval Window of 30 days. 
+
+![Bitcoin Closing Prices](./images/close.png)
+
 
 
 ## Volatility Measuring 
@@ -112,14 +116,14 @@ The target here would be `vol_future` which represents the daily realized volati
 
 For example, using an `n_future` value of 7 and an `INTERVAL_WINDOW` of 30, the value that I want to predict at time step `t` would be the average daily realized volatility from time step `t-22` to time step `t+7`.
 
-![Current versus Future Daily Volatility](./images/daily_vol.jpg)
+![Current versus Future Daily Volatility](./images/daily_vol.png)
 
 
 ## Exploratory Data Analysis
 
 ### Daily Volatility Grouped by Month
 
-![Daily Volatility Grouped by Month](./images/vol_by_month.jpg)
+![Daily Volatility Grouped by Month](./images/vol_by_month.png)
 
 It can be observed that:
 
@@ -129,11 +133,15 @@ It can be observed that:
 
 ### Daily Volatility Grouped by Year
 
-![Daily Volatility Grouped by Year](./images/vol_by_year.jpg)
+![Daily Volatility Grouped by Year](./images/vol_by_year.png)
 
 This plot does reflect Bitcoin's first record peak in 2017 (around USD 19,800 towards the end of December). And the outliers in 2020 corresponded with its over 200% surge in 2020 (Bitcoin started out at USD 7,200 at the beginning of 2020). It reached USD 20,000 on most exchanges on 12/15/2020, and then proceeded to hit USD 30,000 just 17 days later, which is very impressive considering it took the Dow Jones close to 3 years to make the same move. And then, on 01/07/2021 it broke USD 40,000.
 
 And based on this, 2021's daily volatiliy overall has been on the higher side as well.
+
+### Volatility Distribution
+
+![Volatility Distribution](./images/vol_dist.png)
 
 
 ## Train-Validation-Test Splits
@@ -147,7 +155,7 @@ I then split the dataset into 3 parts as follows:
 
 The final model would be trained on the combination of Training & Validation sets, and then tested on the Test set (last 30 days with future volatility available for performance evaluation).
 
-![Training Validation Test Split](./images/train_val_test.jpg)
+![Training Validation Test Split](./images/train_val_test.png)
 
 
 # Modeling
@@ -165,7 +173,12 @@ RMSE and RMSPE would be tracked across different models' performance on validati
 
 Two different simple baseline models were created to compare later models against. These 2 simple models are based on 2 essential characteristics of volatility:
 - **Mean Baseline model**: volatility in the long term will probably **mean revert** (meaning it'd be close to whatever the historical long-term average has been)
+
+![Mean Baseline Preditions](./images/baseline.jpg)
+
 - **Naive Random Walk Forecasting**: volatility tomorrow will be close to what it is today (**clustering**) 
+
+![Naive Random Walk Predictions](./images/naive.jpg)
 
 
 ## GARCH Models
@@ -195,7 +208,7 @@ GARCH is generally regarded as an insightful improvement on naively assuming fut
 
 Among all variants of the GARCH family that I have created, **TARCH(2,2)** with **Bootstrap** forecasting method was able to achive lowest RMSPE and RMSE on the Validation Set.
 
-![TARCH 2,2 Predictions](./images/tarch_22_preds.jpg)
+![TARCH 1,2 Predictions](./images/best_tarch_preds.png)
 
 ## Neural Networks
 
@@ -248,40 +261,42 @@ in which:
 
 ### Final Model Architecture
 
-The best performing Multivariate model is as simple 2-layered Bidirectional LSTM with 20 and 10 units using a lookback window `n_past` of 30 days.
+The best performing Multivariate model is as simple 3-layered Bidirectional LSTMs with 64, 32 and 16 units using a lookback window `n_past` of 30 days and `batch_size = 64`. In addition, there're 3 Dropout layers at 0.1 in between hidden LSTM layers.
 
-![Final Multivariate LSTM predictions](./images/final_lstm_test_preds.jpg)
+![Final Multivariate LSTM predictions](./images/final_lstm_preds.jpg)
 
 
 # Conclusion
 
-|    | Model                                                                  |   Validation RMSPE |   Validation RMSE |
-|---:|:-----------------------------------------------------------------------|-------------------:|------------------:|
-|  0 | Mean Baseline                                                          |           0.812957 |         0.136064  |
-|  1 | Random Walk Naive Forecasting                                          |           0.233755 |         0.0525863 |
-|  2 | GARCH(1,1)  Constant Mean  Normal Dist                                 |           0.534194 |         0.185466  |
-|  3 | Analytical GJR-GARCH(1,1,1)  Constant Mean  Skewt Dist                 |           0.286386 |         0.0910722 |
-|  4 | Bootstrap TARCH(1,1)  Constant Mean  Skewt Dist                        |           0.217488 |         0.0696523 |
-|  5 | Simulation TARCH(1,1)  Constant Mean  Skewt Dist                       |           0.222418 |         0.0731703 |
-|  6 | Bootstrap TARCH(2,2)  Constant Mean  Skewt Dist                        |           0.213242 |         0.0668474 |
-|  7 | Simple LR Fully Connected NN  n_past=14                                |           0.252272 |         0.0526278 |
-|  8 | LSTM 1 layer 20 units  n_past=14                                       |           0.234317 |         0.0511795 |
-|  9 | 2 layers Bidirect LSTM (32/16 units)  n_past=30                        |           0.200845 |         0.0485337 |
-| 10 | 1 Conv1D 2 Bidirect LSTM layers (32/16)  n_past=60  batch=64           |           0.27029  |         0.0605635 |
-| 11 | 2 Bidirect LSTMs (32/16)  n_past=30  batch=64  SGD lr=5e-05            |           0.761351 |         0.141783  |
-| 12 | Multivariate Bidirect LSTM 1 layer (20 units)  n_past=30               |           0.191266 |         0.0482642 |
-| 13 | Multivariate Bidirect LSTM 3 layers (64/32/16 units)  n_past=30        |           0.236086 |         0.0551671 |
-| 14 | Multivariate 2 Bidirect LSTM layers (20/10 units)  n_past=30  batch=64 |           0.191254 |         0.0487875 |
+|    | Model                                                                         |   Validation RMSPE |   Validation RMSE |
+|---:|:------------------------------------------------------------------------------|-------------------:|------------------:|
+|  0 | Mean Baseline                                                                 |           0.50704  |         0.132201  |
+|  1 | Random Walk Naive Forecasting                                                 |           0.224657 |         0.0525334 |
+|  2 | GARCH(1,1), Constant Mean, Normal Dist                                        |           0.530965 |         0.185607  |
+|  3 | Analytical GJR-GARCH(1,1,1), Constant Mean, Skewt Dist                        |           0.27668  |         0.0903117 |
+|  4 | Bootstrap TARCH(1,1), Constant Mean, Skewt Dist                               |           0.209534 |         0.069549  |
+|  5 | Simulation TARCH(1,1), Constant Mean, Skewt Dist                              |           0.215768 |         0.0735647 |
+|  6 | Bootstrap TARCH(1, 2, 0), Constant Mean, Skewt Dist                           |           0.201579 |         0.0668451 |
+|  7 | Simple LR Fully Connected NN, n_past=14                                       |           0.230476 |         0.0536867 |
+|  8 | LSTM 1 layer 20 units, n_past=14                                              |           0.218641 |         0.0554505 |
+|  9 | 2 layers Bidirect LSTM (32/16 units), n_past=30                               |           0.201927 |         0.0608617 |
+| 10 | 1 Conv1D 2 Bidirect LSTM layers (32/16), n_past=60, batch=64                  |           0.221937 |         0.0620173 |
+| 11 | 2 Bidirect LSTMs (32/16), n_past=30, batch=64, SGD lr=5.9e-05                 |           0.452836 |         0.180723  |
+| 13 | Multivariate Bidirect LSTM 3 layers (64/32/16 units), n_past=30               |           0.200929 |         0.0696049 |
+| 15 | Multivariate Bidirect LSTM 3 layers (64/32/16 units), n_past=30               |           0.186887 |         0.0561178 |
+| 16 | Multivariate 4 Bidirect LSTM layers (128/64/32/16 units), n_past=30, batch=64 |           0.163791 |         0.0474866 |
+| 19 | Multivariate Bidirect LSTM 3 layers (64/32/16 units), n_past=30               |           0.161375 |         0.0483476 |
+| 20 | Multivariate 4 Bidirect LSTM layers (128/64/32/16 units), n_past=30, batch=64 |           0.178676 |         0.0533179 |
 
-A trader does not need to make perfectly accurate forecast to have a positive expectation when participating in the markets, he/she just needs to make a forecast that is **more correct than the consensus**, which I believe my best model so far would be able to help achieve. 
+A trader does not need to make perfectly accurate forecast to have a positive expectation when participating in the markets, he/she just needs to make a forecast that is both correct (ie. bullish or bearish) and **more correct than the consensus**. 
 
-My final LSTM model has an RMSPE of 0.0708 on the Test set (which is the most recent 30 days of which future volatility data is available for comparison). Since RMSPE indicates the average magnitude of the error in relation to the actual values, that translates to **a magnitude accuracy of 93% on the average 7 days forward-looking daily volatility forecasting within the period of 07/17/2021 to 08/15/2021**, which is part of some more quiet months for volatility historically.  
+My final LSTM model has an RMSPE of 0.047 on the Test set (which is the most recent 30 days of which future volatility data is available for comparison). Since RMSPE indicates the average magnitude of the error in relation to the actual values, that translates to a magnitude accuracy of **94.8% on the average 7-day horizon daily volatility forecasting within the period of 07/26/2021 to 08/24/2021** (which has been historically less volatile).  
 
-In terms of performance on the validation set, which spans 365 days, LSTM model has an RMSPE of 0.191254, which is **roughly 2.1% better than the best performing variant of the GARCH models** - TARCH(2,2) with an RMSPE of 0.213242.
+In terms of performance on the validation set, LSTM model has an RMSPE of 0.161375, which is roughly **4.02% better than the best performing variant of the GARCH models** - TARCH(1,2) with an RMSPE of 0.201579.
 
-However, since financial time series data are constantly evolving, no model would be able to consistently forecast with high accuracy level forever. The average lifetime of a financial model is between 6 months to 5 years, and there's a phenomenon in quant trading that is called **alpha decay**, which is the loss in predictive power of an alpha model over time. In addition, researchers have found that the publication of a new "edge" or anomaly in the markets lessens its returns by up to 58%. 
+However, since financial time series data are constantly evolving, no model would be able to consistently forecast with high accuracy level forever. The average lifetime of a model is between 6 months to 5 years, and there's a phenomenon in quant trading that is called **alpha decay**, which is the loss in predictive power of an alpha model over time. In addition, according to Sinclair (2020), researchers have found that the publication of a new "edge" or anomaly in the markets lessens its returns by up to 58%. 
 
-These models therefore require constant tweaking and tuning based on the most recent information available to make sure the model stays up-to-date and learn to evolve with the markets. 
+These models therfore require constant tweaking and tuning based on the most recent information available to make sure the model stays up-to-date and learn to evolve with the markets. 
 
 
 # Next Steps
