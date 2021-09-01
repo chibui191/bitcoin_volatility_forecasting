@@ -100,6 +100,8 @@ There's another advantage to log returns, which is that they're additive across 
 
 <img src="https://render.githubusercontent.com/render/math?math=r_{t1, t2} %2B r_{t2, t3} = r_{t1, t3}">
 
+![Returns vs. Log Returns](./images/returns_logreturns.png)
+
 For this specific project, **DAILY REALIZED VOLATILITY** is calculated using an **interval window** of **30 days** as follows:
 
 <img src="https://render.githubusercontent.com/render/math?math=\sigma_{daily} = \sqrt{\sum_{t} r_{t-1, t}^2} * \sqrt{\frac{1}{interval-1}}">
@@ -227,7 +229,7 @@ This could help provide additional context to the networks, and usually produces
 
 After experimenting with various Neural Networks architectures, I found that a simple 2-layered Bidirectional LSTM model with 32 and 16 units outpeformed everything else, including the best GARCH model found. 
 
-![2 layers Bidirectional LSTM predictions](./images/lstm_7_preds.png)
+<<< INSERT IMAGE >>>
 
 
 ## Final Model
