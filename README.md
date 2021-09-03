@@ -50,7 +50,7 @@ The purpose of this project is to take a sneak peek into the future by **forecas
 
 Volatility attempts to measure magnitude of price movements that a financial instrument experiences over a certain period of time. The more dramatic the price swings are in that instrument, the higher the level of volatility, and vice versa.
 
-Volatility is generally accepted as the best measure of market risk and volatility forecasting is used in many different applications across the industry. **Realized Volatility Forecasting** models are typically utilized in risk management, market making, portfolio optimization, and option trading. Specifically, according to Sinclair (2020), a number of trading strategies evolve around identifying situations where this volatility mismatch occurs:
+Volatility is generally accepted as the best measure of market risk and volatility forecasting is used in many different applications across the industry. **Realized Volatility Forecasting** models are typically utilized in risk management, market making, portfolio optimization, and option trading. Specifically, according to Sinclair (2020), a number of trading strategies revolve around identifying situations where this volatility mismatch occurs:
 
 <img src="https://render.githubusercontent.com/render/math?math=P/L = Vega|\sigma_{implied} - \sigma_{realized}|">
 
@@ -85,7 +85,7 @@ The objective of this project is to forecast the average daily **Realized Volati
 
 Volatility does **not** measure the direction of price changes of a financial instrument, merely its dispersions over a certain period of time. High volatility is associated with higher risk, and low volatility lower risk. There're 2 main types of Volatility:
 
-- **Historical Volatility** (HV) or **Realized Volatility** is the actual volatility demonstrated by the underlying asset over a period of time. Realized Volatility is commonly calculated as the standard deviation of price returns, which is the dollar change in price as a percentage of previous day's price.
+- **Historical Volatility** or **Realized Volatility** (RV) is the actual volatility demonstrated by the underlying asset over a period of time. Realized Volatility is commonly calculated as the standard deviation of price returns, which is the dollar change in price as a percentage of previous day's price.
 - **Implied volatility** (IV), on the other hand, is the level of volatility of the underlying that is implied by the current option price.
 
 (The main focus of this project is **NOT Implied Volatility**, which can be derived from option pricing models such as the Black Scholes Model). 
