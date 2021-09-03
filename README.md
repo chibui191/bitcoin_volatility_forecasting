@@ -21,7 +21,7 @@ Author: **Chi Bui**
 ├── performance_df               <-- records of all models' performance metrics & propability predictions 
 │                                    on validation set
 │
-├── Reports                      <-- Generated analysis
+├── Report                       <-- Generated analysis
 │   └── presentation.pdf         <-- Non-technical presentation slides
 │ 
 │
@@ -30,7 +30,7 @@ Author: **Chi Bui**
 
 ### Quick Links
 1. [Final Analysis Notebook](./Notebooks/Reports/report_notebook.ipynb)
-1. [Non-Technical Presentation Slides](./reports/presentation.pdf)
+1. [Non-Technical Presentation Slides](./Report/presentation.pdf)
 
 ### Remarks
 
