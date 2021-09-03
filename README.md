@@ -30,6 +30,7 @@ Author: **Chi Bui**
 
 ### Quick Links
 1. [Final Analysis Notebook](./Notebooks/Reports/report_notebook.ipynb)
+1. [Non-Technical Presentation Slides](./reports/presentation.pdf)
 
 ### Remarks
 
@@ -38,38 +39,43 @@ The second part of the notebook utilizes LSTM, which uses an optimized implement
 
 ## Overview
 
-Volatility is generally accepted as the best measure of market risk and volatility forecasting is used in many different applications across the industry including risk management, value-at-risk, portfolio construction and optimization, active fund management, risk-parity investing, and derivatives trading. 
+Since Bitcoin's first appearance in 2009, it has changed the world's financial landscape substantially. The decentralized cryptocurrency has established itself as an asset class recognized by many asset managers, large investment banks and hedge funds. As the speed of mainstream adoption continues to soar, it is also leading investors to explore new ventures, such as crypto options and futures.
 
-Volatility attempts to measure magnitude of price movements that a financial instrument experiences over a certain period of time. The more dramatic the price swings are in that instrument, the higher the level of volatility, and vice versa.
+Bitcoin has been historically known to be more volatile than regulated stocks and commodities. Its most recent surge in late December 2020, early January 2021 has brought about a lot of questions and uncertainties about the future financial landscape. At the point of writing this report (end of August 2021), Bitcoin is traded at slightly below USD 50,000, which is no small feat considering it entered 2020 at around USD 7,200. 
 
-The purpose of this project is to take a sneak peek into the future by **forecasting the next 7 days' average daily realized volatility of BTC-USD** using 2 different approaches - the traditional econometric approach **GARCH** and state-of-the-art **LSTM Neural Networks**.
+The purpose of this project is to take a sneak peek into the future by **forecasting the next 7 days' average daily Realized Volatility (RV) of BTC-USD** using 2 different approaches - the traditional econometric approach to volatility prediction of financial time series **GARCH** and state-of-the-art **LSTM Neural Networks**.
 
 
 ## Business Problem
 
-Since Bitcoin's first appearance in 2009, it has changed the world's financial landscape substantially. The decentralized cryptocurrency has established itself as an asset class recognized by many asset managers, large investment banks and hedge funds. As the speed of mainstream adoption continues to soar, it is also leading investors to explore new ventures, such as crypto options.
+Volatility attempts to measure magnitude of price movements that a financial instrument experiences over a certain period of time. The more dramatic the price swings are in that instrument, the higher the level of volatility, and vice versa.
 
-Bitcoin has been historically known to be more volatile than regulated stocks and commodities. Its most recent surge in late December 2020, early January 2021 has brought about a lot of questions and uncertainties about the future financial landscape. At the point of this report being written (August 2021), Bitcoin is traded at slightly above USD 50,200, which is no small feat considering it entered 2020 at around USD 7,200. 
+Volatility is generally accepted as the best measure of market risk and volatility forecasting is used in many different applications across the industry. **Realized Volatility Forecasting** models are typically utilized in risk management, market making, portfolio optimization, and option trading. Specifically, according to Sinclair (2020), a number of trading strategies evolve around identifying situations where this volatility mismatch occurs:
 
-Although the forecasting and modeling of volatility has been the focus of many empirical studies and theoretical investigations in academia, forecasting volatility accurately remains a crucial challenge for scholars. On top of that, since crypto options trading is relatively new, there has not been as much research done on Bitcoin volatility forecasting specifically. Crytocurrencies carry certain nuances that differ themselves from traditional regulated stocks and commodities, which would also need to be accounted for.
+<img src="https://render.githubusercontent.com/render/math?math=P/L = Vega|\sigma_{implied} - \sigma_{realized}|">
+
+in which Vega is the measurement of an option's price sensitivity to changes in the volatility of the underlying asset, and <img src="https://render.githubusercontent.com/render/math?math=\sigma"> is volatility.
+As Implied Volatility (IV) could be derived from Option Prices using models such as the Black Scholes Model, forecasting Realized Volatility would give us the key to the second part of the equation.
+
+Although the forecasting and modeling of volatility has been the focus of many empirical studies and theoretical investigations in academia, forecasting volatility accurately remains a crucial challenge for scholars. On top of that, since crypto option trading is relatively new, there has not been as much research done on this Bitcoin volatility forecasting. In addition, crytocurrencies carry certain nuances that differ themselves from traditional regulated stocks and commodities, which would also need to be accounted for.
 
 
 ## Dataset
 
 The historical dataset of Bitcoin Open/Close/High/Low prices were obtained using the Yahoo Finance API **`yfinance`**. This API is free, very easy to set up, but yet still contains a wide range of data and offerings. 
 
-BTC-USD prices were downloaded using ticker `BTC-USD` at 1-day interval. Yahoo did not add Bitcoin until 2014; and therefore although it was first traded in 2009, **`yfinance`** only contains data from September 2014 until now (August 2021). I would therefore be working with approx. 2,500 datapoints covering about 7 years.
+I will be downloading BTC-USD prices using ticker `BTC-USD` at 1-day interval. Yahoo did not add Bitcoin until 2014; and therefore although it was first traded in 2009, **`yfinance`** only contains data from September 2014 until now (August 2021). I would therefore be working with approx. 2,500 datapoints covering about 7 years of trading days.
 
 
 ### Dataset Structure
 
 The dataset contains daily prices of BTC-USD including:
-- Open
-- High
-- Low
-- Close
+- `Open`
+- `High`
+- `Low`
+- `Close`
 
-The objective of this project is to forecast the average daily volatility of BTC-USD 7 days out, using an Interval Window of 30 days. 
+The objective of this project is to forecast the average daily **Realized Volatility** of BTC-USD 7 days out, using an Interval Window of 30 days. 
 
 ![Bitcoin Closing Prices](./images/close.png)
 
@@ -106,7 +112,7 @@ For this specific project, **DAILY REALIZED VOLATILITY** is calculated using an 
 
 <img src="https://render.githubusercontent.com/render/math?math=\sigma_{daily} = \sqrt{\sum_{t} r_{t-1, t}^2} * \sqrt{\frac{1}{interval-1}}">
 
-The reason I selected 30 days is because 7 days seems too noisy to observe meaningful patterns, while longer intervals seem to smooth the volatility line down significantly and tend to mean-revert. 
+The reason I selected 30 days is because 7 days seems too noisy to observe meaningful patterns, while longer intervals seem to smooth the volatility down significantly and tend to revert back to the mean.
 
 Using interval window of 30 days would also help avoid wasting too many datapoints at the beginning of the dataset.
 
@@ -114,14 +120,14 @@ Using interval window of 30 days would also help avoid wasting too many datapoin
 
 Time-series forecasting models are the models that are capable to predict **future** values based on previously observed values. Target "**future**" data in this case is obtained by **shifting the current volatility backward** by the number of `n_future` lags. 
 
-For example, respected to last week's Monday, this week's Monday is the "**future**"; therefore I just need to shift the volatility this week back by 7 days, and use it as the desired "**future**" output for last week, which I would then use for Neural Networks training and model performance evaluation. 
+For example, respected to last week's Monday, this week's Monday is the "**future**"; therefore I just need to shift the volatility this week back by 7 days, and use it as the desired "**future**" output for last week's, which I would then use for Neural Networks training and model performance evaluation. 
 
 This is a visualization of how current volatility is shifted backward to become future values, which I want to eventually aim for.
 
 ![Shifting Volatility backwards](./images/vol_shift_opt.gif)
 
 In the plot above, the **blue line** indicates the **target future** value that I ultimately try to match up to. 
-And the dotted **gray line** represents the **current volatility** in real-time. 
+And the dotted **gray line** represents the **current volatility** at that time step. 
 
 ### Forecasting Target
 
@@ -137,18 +143,24 @@ For example, using an `n_future` value of 7 and an `INTERVAL_WINDOW` of 30, the 
 ![Daily Volatility Grouped by Month](./images/vol_by_month.png)
 
 It can be observed that:
-
-- Volatility has consistently reached some of its higher points in the in the months of December/January historically
-- March and April has the most amount of large outliers
-- while August and September (which are the upcoming months I am going to forecast) historically has been relatively quiet
+- volatility has consistently reached some of its higher points in the in the months of December/January historically 
+- March and April have the most amount of large outliers 
+- while August and September (which are the upcoming months of the final testing forecast) historically has been relatively quiet
 
 ### Daily Volatility Grouped by Year
 
+Cryptocurrencies have gone through some huge structural changes in the last few years that would've affected volatility directly, such as:
+- Crypto Options became available on Deribit in 2016
+- Bitcoin Futures was offered on CME in 2017
+- and then CME Bitcoin Options in 2020
+
+These events have allowed people to trade crypto volatility more efficiently, and therefore data pre-2016 are likely structurally different, and probably followed different patterns compared to data after 2016.
+
 ![Daily Volatility Grouped by Year](./images/vol_by_year.png)
 
-This plot does reflect Bitcoin's first record peak in 2017 (around USD 19,800 towards the end of December). And the outliers in 2020 corresponded with its over 200% surge in 2020 (Bitcoin started out at USD 7,200 at the beginning of 2020). It reached USD 20,000 on most exchanges on 12/15/2020, and then proceeded to hit USD 30,000 just 17 days later, which is very impressive considering it took the Dow Jones close to 3 years to make the same move. And then, on 01/07/2021 it broke USD 40,000.
+These events are reflected in the plot above - Bitcoin's first record peak in 2017 (around USD 19,800 towards the end of December). And the outliers in 2020 corresponded with its over 200% surge in 2020 (Bitcoin started at USD 7,200 at the beginning of 2020). It reached USD 20,000 on most exchanges on 12/15/2020, and then proceeded to hit USD 30,000 just 17 days later, which is no small feat. To put things in perspective, it took the Dow Jones close to 3 years to make the same move. And then, on 01/07/2021 it broke USD 40,000. As of the time this report is written, BTC-USD is traded at high USD 49,700.
 
-And based on this, 2021's daily volatiliy overall has been on the higher side as well.
+It can be observed that 2021's daily volatiliy overall has also been on the higher side. 
 
 ### Volatility Distribution
 
@@ -159,16 +171,14 @@ The distribution of daily realized volatility is lightly right skewed, with a sm
 A skewed right distribution would have smaller median compared to mean, and mode smaller than median (mode < median < mean).
 
 
-## Train-Validation-Test Splits
+## **Train-Validation-Test Splits**
 
-There're a total of 2491 usable datapoints in this dataset which covers a period of almost 7 years from October 2014 until today (August 2021). Since cryptocurrencies are not traded on a regulated exchange, the Bitcoin market is open 24/7, 1 year covers a whole 365 trading days instead of 252 days a year like with other stocks and commodities.
+There're a total of 2500 usable datapoints in this dataset which covers a period of almost 7 years from October 2014 until today (end of August 2021). Since cryptocurrencies are not traded on a regulated exchange, the Bitcoin market is open 24/7, 1 year covers a whole 365 trading days instead of 252 days a year like with other stocks and commodities.
 
-I then split the dataset into 3 parts as follows:
-- the most recent 30 usable datapoints would be used for final **Testing - approx. 1.2%**
-- 1 full year (365 days) for **Validation** and model tuning during training - **approx. 14.7%**
+I would split the dataset into 3 parts as follows:
+- the most recent 30 usable datapoints would be used for **Final Model Testing - approx. 1.2%**
+- 1 full year (365 days) for **Validation and Model Tuning during training - approx. 14.7%**
 - and the remaining for **Training - approx. 84.1%**
-
-The final model would be trained on the combination of Training & Validation sets, and then tested on the Test set (last 30 days with future volatility available for performance evaluation).
 
 ![Training Validation Test Split](./images/train_val_test.png)
 
@@ -221,7 +231,7 @@ where <img src="https://render.githubusercontent.com/render/math?math=\alpha">, 
 
 GARCH is generally regarded as an insightful improvement on naively assuming future volatility will be like the past, but also considered widely overrated as predictor by some experts in the field of volatility. GARCH models capture the essential characteristics of volatility: clustering and mean-revert.
 
-Among all variants of the GARCH family that I have created, **TARCH(2,2)** with **Bootstrap** forecasting method was able to achive lowest RMSPE and RMSE on the Validation Set.
+Among all variants of the GARCH family that I have created, **TARCH(1,2)** with **Bootstrap** forecasting method was able to achive lowest RMSPE and RMSE on the Validation Set.
 
 ![TARCH 1,2 Predictions](./images/best_tarch_preds.png)
 
@@ -240,7 +250,7 @@ This could help provide additional context to the networks, and usually produces
 
 After experimenting with various Neural Networks architectures, I found that a simple 2-layered Bidirectional LSTM model with 32 and 16 units outpeformed everything else, including the best GARCH model found. 
 
-<<< INSERT IMAGE >>>
+![Univariate 2 Layered Bidirectional LSTM Predictions](./images/lstm_2.png)
 
 
 ## Final Model
@@ -277,51 +287,51 @@ in which:
 
 ### Final Model Architecture
 
-The best performing Multivariate model is as simple 3-layered Bidirectional LSTMs with 64, 32 and 16 units using a lookback window `n_past` of 30 days and `batch_size = 64`. In addition, there're 3 Dropout layers at 0.1 in between hidden LSTM layers.
+The best performing Multivariate model is as simple 2-layered Bidirectional LSTMs with 32 and 16 units using a lookback window `n_past` of 30 days and `batch_size = 64`. In addition, there're 2 Dropout layers at 0.1 in following each hidden LSTM layers.
 
 ![Final Multivariate LSTM predictions](./images/final_lstm_preds.png)
+
+It should be stressed that the model was trained on both the training and validation data this time. Therefore it'd naturally trace the target more closely up until the third week of July 2021 where the validation ends. 
 
 
 # Conclusion
 
 |    | Model                                                                         |   Validation RMSPE |   Validation RMSE |
 |---:|:------------------------------------------------------------------------------|-------------------:|------------------:|
-|  0 | Mean Baseline                                                                 |           0.50704  |         0.132201  |
+| 12 | Multivariate Bidirect LSTM 2 layers (32/16 units), n_past=30                  |           0.156677 |         0.0461386 |
+| 15 | Multivariate 2 Bidirect LSTM layers (32/16 units), n_past=30, batch=32, tanh  |           0.163605 |         0.0507814 |
+| 13 | Multivariate Bidirect LSTM 3 layers (64/32/16 units), n_past=30               |           0.164623 |         0.0446602 |
+| 14 | Multivariate 4 Bidirect LSTM layers (128/64/32/16 units), n_past=30, batch=64 |           0.167586 |         0.0503861 |
+|  6 | Bootstrap TARCH(1, 2, 0), Constant Mean, Skewt Dist                           |           0.200954 |         0.0668514 |
+|  9 | 2 layers Bidirect LSTM (32/16 units), n_past=30                               |           0.202388 |         0.0578647 |
+|  4 | Bootstrap TARCH(1,1), Constant Mean, Skewt Dist                               |           0.209654 |         0.0698137 |
+|  5 | Simulation TARCH(1,1), Constant Mean, Skewt Dist                              |           0.215751 |         0.0732927 |
+|  8 | LSTM 1 layer 20 units, n_past=14                                              |           0.223199 |         0.0576027 |
 |  1 | Random Walk Naive Forecasting                                                 |           0.224657 |         0.0525334 |
+| 10 | 1 Conv1D 2 Bidirect LSTM layers (32/16), n_past=30, batch=64                  |           0.230372 |         0.0621463 |
+|  7 | Simple LR Fully Connected NN, n_past=14                                       |           0.238177 |         0.0553356 |
+|  3 | Analytical GJR-GARCH(1,1,1), Constant Mean, Skewt Dist                        |           0.276679 |         0.0903115 |
+| 11 | 2 Bidirect LSTMs (32/16), n_past=30, batch=64, SGD lr=6.9e-05                 |           0.399735 |         0.1655    |
+|  0 | Mean Baseline                                                                 |           0.50704  |         0.132201  |
 |  2 | GARCH(1,1), Constant Mean, Normal Dist                                        |           0.530965 |         0.185607  |
-|  3 | Analytical GJR-GARCH(1,1,1), Constant Mean, Skewt Dist                        |           0.27668  |         0.0903117 |
-|  4 | Bootstrap TARCH(1,1), Constant Mean, Skewt Dist                               |           0.209534 |         0.069549  |
-|  5 | Simulation TARCH(1,1), Constant Mean, Skewt Dist                              |           0.215768 |         0.0735647 |
-|  6 | Bootstrap TARCH(1, 2, 0), Constant Mean, Skewt Dist                           |           0.201579 |         0.0668451 |
-|  7 | Simple LR Fully Connected NN, n_past=14                                       |           0.230476 |         0.0536867 |
-|  8 | LSTM 1 layer 20 units, n_past=14                                              |           0.218641 |         0.0554505 |
-|  9 | 2 layers Bidirect LSTM (32/16 units), n_past=30                               |           0.201927 |         0.0608617 |
-| 10 | 1 Conv1D 2 Bidirect LSTM layers (32/16), n_past=60, batch=64                  |           0.221937 |         0.0620173 |
-| 11 | 2 Bidirect LSTMs (32/16), n_past=30, batch=64, SGD lr=5.9e-05                 |           0.452836 |         0.180723  |
-| 13 | Multivariate Bidirect LSTM 3 layers (64/32/16 units), n_past=30               |           0.200929 |         0.0696049 |
-| 15 | Multivariate Bidirect LSTM 3 layers (64/32/16 units), n_past=30               |           0.186887 |         0.0561178 |
-| 16 | Multivariate 4 Bidirect LSTM layers (128/64/32/16 units), n_past=30, batch=64 |           0.163791 |         0.0474866 |
-| 19 | Multivariate Bidirect LSTM 3 layers (64/32/16 units), n_past=30               |           0.161375 |         0.0483476 |
-| 20 | Multivariate 4 Bidirect LSTM layers (128/64/32/16 units), n_past=30, batch=64 |           0.178676 |         0.0533179 |
-
-A trader does not need to make perfectly accurate forecast to have a positive expectation when participating in the markets, he/she just needs to make a forecast that is both correct (ie. bullish or bearish) and **more correct than the consensus**. 
-
-My final LSTM model has an RMSPE of 0.047 on the Test set (which is the most recent 30 days of which future volatility data is available for comparison). Since RMSPE indicates the average magnitude of the error in relation to the actual values, that translates to a magnitude accuracy of **94.8% on the average 7-day horizon daily volatility forecasting within the period of 07/26/2021 to 08/24/2021** (which has been historically less volatile).  
-
-In terms of performance on the validation set, LSTM model has an RMSPE of 0.161375, which is roughly **4.02% better than the best performing variant of the GARCH models** - TARCH(1,2) with an RMSPE of 0.201579.
-
-However, since financial time series data are constantly evolving, no model would be able to consistently forecast with high accuracy level forever. The average lifetime of a model is between 6 months to 5 years, and there's a phenomenon in quant trading that is called **alpha decay**, which is the loss in predictive power of an alpha model over time. In addition, according to Sinclair (2020), researchers have found that the publication of a new "edge" or anomaly in the markets lessens its returns by up to 58%. 
-
-These models therfore require constant tweaking and tuning based on the most recent information available to make sure the model stays up-to-date and learn to evolve with the markets. 
 
 
-# Next Steps
+In terms of performance on the validation set (7/23/2020 to 7/25/2021), my final LSTM model has an RMSPE of 0.156677, which is roughly 4.42% better than the best performing variant of the GARCH models found - TARCH(1,2) with an RMSPE of 0.200954. A trader does not need to make perfectly accurate forecast to have a positive expectation when participating in the markets, he/she just needs to make a forecast that is **both correct and more correct than the general consensus**. With GARCH still being the most popular volatility forecasting model, Multivariate LSTM could potentially give investors an advantage in terms of higher forecasting accuracy.
 
-As briefly mentioned in the Final Notebook, I think there's potential application of WaveNet in the forecasting of volatility, and would like to explore that option in the future.
+The final LSTM model has an RMSPE of 0.0534 on the Test set (which is the most recent 30 days of which future volatility data is available for comparison). Since RMSPE indicates the average magnitude of the error in relation to the actual values, an RMSPE of 0.0534 would translate to a magnitude accuracy of 94.65% on the average 7-day horizon daily volatility forecasting within the period of 07/24/2021 to 08/22/2021.  
 
-In addition, it's common knowledge that economic events could affect markets' dynamics. Since cryptocurrencies have cerain nuances that are different from other stocks and commodities', adding in regular economic calendars' events might not be the most relevant. I am currently still doing more research on the types of events that could have driven Bitcoin movements (ie events indicating/signaling an increase in Bitcoin adoption), and would like to incorporate that in another set of Multivariate LSTM models in the future to hopefully improve predictive power even more.
+However, since financial time series data are constantly evolving, no model would be able to consistently forecast with high accuracy level forever. The average lifetime of a model is between 6 months to 5 years, and there's a phenomenon in quant trading that is called **alpha decay**, which is the loss in predictive power of an alpha model over time. In addition, according to Sinclair (2020), researchers have found that the publication of a new "edge" or anomaly in the markets lessens its returns by up to 58%.  
 
-Another goal of mine is to extend the forecasting horizon to 30 days instead of 7. 30-day-out predictions would be able to bring a lot of values to option trading, as options contract cycles are usually expressed in terms of months. 
+These models therfore require constant tweaking and tuning based on the most recent information available to make sure they stay up-to-date and learn to evolve with the markets. 
+
+
+# **Next Steps**
+
+As briefly mentioned above, I think there's potential application of WaveNet in the forecasting of volatility, and would like to explore that option in the future.
+
+In addition, it's common knowledge that economic events could affect markets' dynamics. Since cryptocurrencies have cerain nuances that are different from other stocks and commodities', incorporating the regular economic calendars' events might not be the most relevant. I am currently still doing more research on collecting significant events that could have driven Bitcoin movements, and would like to incorporate that in another Multivariate LSTM set of models in the future to hopefully improve predictive power even more.
+
+Eventually I want to experiment with higher frequencies (ie. intra-day), and also different bucketing intervals as well.
 
 
 # References:
