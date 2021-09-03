@@ -1,7 +1,7 @@
 ![Bitcoin Forbes](./images/forbes_bitcoin.jpg)
 
 
-# Bitcoin's Realized Volatility Forecasting with GARCH and Multivariate LSTM
+# Bitcoin Realized Volatility Forecasting with GARCH and Multivariate LSTM
 
 Author: **Chi Bui**
 
@@ -21,7 +21,7 @@ Author: **Chi Bui**
 ├── performance_df               <-- records of all models' performance metrics & propability predictions 
 │                                    on validation set
 │
-├── reports                      <-- Generated analysis
+├── Reports                      <-- Generated analysis
 │   └── presentation.pdf         <-- Non-technical presentation slides
 │ 
 │
@@ -233,6 +233,8 @@ GARCH is generally regarded as an insightful improvement on naively assuming fut
 
 Among all variants of the GARCH family that I have created, **TARCH(1,2)** with **Bootstrap** forecasting method was able to achive lowest RMSPE and RMSE on the Validation Set.
 
+![Expanding Window Forecasting](./images/btc_vol_viz - expanding_page-0001.jpg)
+
 ![TARCH 1,2 Predictions](./images/best_tarch_preds.png)
 
 
@@ -284,6 +286,8 @@ in which:
 - **`batch_size`** is the number of datapoints in each batch
 - **`n_past`** is the number of past time steps to be used for prediction 
 - **`input_dims`** is the number of input features (which is 4 in this case)  
+
+![Sliding Window](btc_vol_viz - sliding_forecast_page-0001.jpg)
 
 ### Final Model Architecture
 
